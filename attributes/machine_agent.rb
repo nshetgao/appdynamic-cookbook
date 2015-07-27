@@ -1,11 +1,12 @@
-default['appdynamics']['machine_agent']['version'] = 'latest'
-default['appdynamics']['machine_agent']['source'] = nil # 'https://packages.appdynamics.com/machine/%{version}/MachineAgent.zip'
-default['appdynamics']['machine_agent']['checksum'] = nil
-default['appdynamics']['machine_agent']['install_dir'] = '/opt/appdynamics/machineagent'
+default['appdynamics']['machine_agent']['version'] = '4.1.0.1'
+default['appdynamics']['machine_agent']['source'] = nil #'http://192.168.10.128/AppDynamics/machine-agent/MachineAgent-4.1.0.1.zip'
+default['appdynamics']['machine_agent']['checksum'] = 'b4d5eec5b09d0ec40880e6fbe1648408f1e8e871b97936e493c2acdf828c865b'
+default['appdynamics']['machine_agent']['install_dir'] = '/home/appdynamics/AppDynamics/machineagent'
 default['appdynamics']['machine_agent']['owner'] = 'root'
 default['appdynamics']['machine_agent']['group'] = 'root'
-
-default['appdynamics']['machine_agent']['init_script'] = '/etc/init.d/appdynamics_machine_agent'
+default['appdynamics']['machine_agent']['filerepo_path'] = '/AppDynamics/machine-agent'
+default['appdynamics']['machine_agent']['init_script'] = '/etc/init.d/appdynamics-machine-agent'
+default['appdynamics']['machine_agent']['sysconfig'] = '/etc/sysconfig/appdynamics-machine-agent'
 
 default['appdynamics']['machine_agent']['template']['cookbook'] = 'appdynamics'
 default['appdynamics']['machine_agent']['template']['source'] = 'machine/controller-info.xml.erb'

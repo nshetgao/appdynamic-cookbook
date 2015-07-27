@@ -2,9 +2,9 @@ agent = node['appdynamics']['machine_agent']
 controller = node['appdynamics']['controller']
 http_proxy = node['appdynamics']['http_proxy']
 
-agent_zip = "#{Chef::Config[:file_cache_path]}/AppDynamicsMachineAgent.zip"
+agent_zip = "#{agent['install_dir']}/MachineAgent.zip"
 
-package "unzip" if node[:platform_family].include?("debian")
+#package "unzip" if node[:platform_family].include?("debian")
 
 directory "#{agent['install_dir']}/conf" do
   owner agent['owner']
@@ -18,35 +18,40 @@ remote_file agent_zip do
   source agent['source'] % {:version => agent['version']}
   checksum agent['checksum']
   backup false
-  mode "0444"
+  mode "0544"
   notifies :run, "execute[unzip-appdynamics-machine-agent]", :immediately
-end
-
-template "#{agent['install_dir']}/run.sh" do
-  source 'machine/run.sh.erb'
-  owner agent['owner']
-  group agent['group']
-  mode "0744"
-  variables(
-    :java => agent['java'],
-    :java_params => agent['java_params'],
-    :install_dir => agent['install_dir'],
-  )
 end
 
 execute "unzip-appdynamics-machine-agent" do
   cwd agent['install_dir']
-  command "unzip -qqo #{agent_zip}"
+  command "unzip -qqo #{agent_zip} && chmod -R 0755 #{agent['install_dir']}/bin/machine-agent"
+  action :nothing
 end
 
 template agent['init_script'] do
   source 'machine/init.d.erb'
   variables(
     :install_dir => agent['install_dir'],
+    :java_home => agent['java'],
+    :java_params => agent['java_params'],
+    :user => agent['owner'],
   )
   owner agent['owner']
   group agent['group']
   mode "0744"
+end
+
+template agent['sysconfig'] do
+  source 'machine/sysconfig.erb'
+  variables(
+    :install_dir => agent['install_dir'],
+    :java_home => agent['java'],
+    :java_params => agent['java_params'],
+    :user => agent['owner'],
+  )
+  owner agent['owner']
+  group agent['group']
+  mode "0600"
 end
 
 template "#{agent['install_dir']}/conf/controller-info.xml" do
@@ -74,7 +79,7 @@ template "#{agent['install_dir']}/conf/controller-info.xml" do
   )
 end
 
-service "appdynamics_machine_agent" do
+service "appdynamics-machine-agent" do
   supports [:start, :stop, :restart]
   action [:enable, :start]
 end

@@ -1,12 +1,6 @@
-default['appdynamics']['app_name'] = nil
-default['appdynamics']['tier_name'] = nil
-default['appdynamics']['node_name'] = nil
-
-default['appdynamics']['controller']['host'] = nil
-default['appdynamics']['controller']['port'] = nil
-default['appdynamics']['controller']['ssl'] = true
-default['appdynamics']['controller']['user'] = nil
-default['appdynamics']['controller']['accesskey'] = nil
+default['appdynamics']['app_name'] = 'Test'
+default['appdynamics']['tier_name'] = 'Servers'
+default['appdynamics']['node_name'] = 'Jenkins'
 
 default['appdynamics']['http_proxy']['host'] = nil
 default['appdynamics']['http_proxy']['port'] = nil
@@ -18,4 +12,4 @@ default['appdynamics']['agent_zip'] = "#{Chef::Config[:file_cache_path]}/AppDyna
 
 # For keeping the installer files
 
-default['filerepo_host'] = 'localhost'
+default['filerepo_host'] = 'jenkins'
